@@ -18,6 +18,14 @@ Arar forecasting
 
 Time series forecasting using arar algorithm.
 
+ARAR algorithm
+--------------
+..math::
+The ARAR algorithm applies a memory-shortening transformation if the underlying
+ process of a given time series ${Y_{t}, t = 1, 2, ..., n}$ is 
+ "long-memory" then it fits an autoregressive model. 
+
+
 
 * Free software: MIT license
 * Documentation: https://arar.readthedocs.io.

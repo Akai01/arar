@@ -15,7 +15,9 @@ class ARAR:
                 The frequency of the data should be a pandas freq strings.
                 See: <https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases>
             max_lag : int
-                Maximum lag for autocorelation function
+                Maximum lag for autocorelation function.
+                It must be max_lag>=26, for the reason see:
+                    Brockwell, Peter J., and Richard A. Davis ARAR chapter.
         References:
             Brockwell, Peter J., and Richard A. Davis.
             Introduction to Time Series and Forecasting.
