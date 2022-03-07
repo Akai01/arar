@@ -1,6 +1,6 @@
 # The ARAR Algorithm:
 ## Memory Shortening
-<img src=".github/figures/memory_shortening.png" width="100%" />
+<img src=".github/figures/memoryshortening.png" width="100%" />
 
 ## The Algorithm:
 <img src=".github/figures/the_algorithm.png" width="100%" />
