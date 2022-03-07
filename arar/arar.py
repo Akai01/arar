@@ -24,7 +24,7 @@ class ARAR:
             Weigt George (2018),
             itsmr: Time Series Analysis Using the Innovations Algorithm.
         Examples:
-            from easyforecast.arar import ARAR
+            from arar.arar import ARAR
             import pandas as pd
             df = pd.read_csv("https://raw.githubusercontent.com/Akai01/example-time-series-datasets/main/Data/retail.csv", sep= ",")
             df.head()
