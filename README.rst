@@ -1,5 +1,5 @@
 .. role:: raw-latex(raw)
-    :format: latex
+    :format: html
 ================
 Arar forecasting
 ================
