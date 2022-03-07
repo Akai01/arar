@@ -1,7 +1,7 @@
 
 # arar: Time series forecasting via arar algorithm.
 
-[![Pypi status](https://img.shields.io/pypi/v/arar.svg](https://pypi.python.org/pypi/arar)
+[![Pypi status](https://img.shields.io/pypi/v/arar.svg)](https://pypi.python.org/pypi/arar)
 
 ## The ARAR Algorithm:
 
