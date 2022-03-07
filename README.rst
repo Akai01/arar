@@ -22,26 +22,28 @@ The ARAR Algorithm:
 Memory Shortening
 -----------------
 
-The ARAR algorithm applies a memory-shortening transformation if the
-underlying process of a given time series
-*Y_t*\ , \ *t* = 1, 2, …, *n* is “long-memory” then it fits an
-autoregressive model.
+The ARAR algorithm applies a memory-shortening transformation
+         if the underlying process of a given time series \\({Y_{t}, t =
+         1, 2, ..., n}\) is “long-memory” then it fits an autoregressive
+         model.
 
-The algorithm follows five steps to classify *Y*\ \ *t*\  and take one
-of the following three actions:
+         The algorithm follows five steps to classify \\({Y_{t}}\) and
+         take one of the following three actions:
 
--  L: declare *Y*\ \ *t*\  as long memory and form *Y*\ \ *t*\  by
-   *Ỹ*\ \ *t*\  = *Y*\ \ *t*\  − *ϕ̂**Y**\ t\ * − *\ τ̂\*
--  M: declare *Y*\ \ *t*\  as moderately long memory and form
-   *Y*\ \ *t*\  by
-   *Ỹ*\ \ *t*\  = *Y*\ \ *t*\  − *ϕ̂*\ 1\ *Y*\ \ *t* − 1 − *ϕ̂*\ 2\ *Y*\ \ *t* − 2
--  S: declare *Y*\ \ *t*\  as short memory.
+         -  L: declare \\({Y_{t}}\) as long memory and form \\({Y_{t}}\)
+            by \\({\tilde{Y}_{t} = Y_{t} - \\hat{\phi}Y_{t -
+            \\hat{\tau}}}\)
+         -  M: declare \\({Y_{t}}\) as moderately long memory and form
+            \\({Y_{t}}\) by \\({\tilde{Y}_{t} = Y_{t} -
+            \\hat{\phi}_{1}Y_{t -1} - \\hat{\phi}_{2}Y_{t -2}}\)
+         -  S: declare \\({Y_{t}}\) as short memory.
 
-If *Y*\ \ *t*\  declared to be *L* or *M* then the series *Y*\ \ *t*\ 
-is transformed again until. The transformation process continuous until
-the transformed series is classified as short memory. However, the
-maximum number of transformation process is three, it is very rare a
-time series require more than 2.
+         If \\({Y_{t}}\) declared to be \\(L\) or \\(M\) then the series
+         \\({Y_{t}}\) is transformed again until. The transformation
+         process continuous until the transformed series is classified
+         as short memory. However, the maximum number of transformation
+         process is three, it is very rare a time series require more
+         than 2.
 
 The Algorithm:
 --------------
