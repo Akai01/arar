@@ -1,4 +1,5 @@
-.. role:: raw-math(raw)
+.. role:: raw-latex(raw)
+    :format: latex
 ================
 Arar forecasting
 ================
