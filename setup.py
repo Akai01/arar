@@ -4,8 +4,11 @@
 
 from setuptools import setup, find_packages
 
-with open('README.md') as readme_file:
+with open('README.rst') as readme_file:
     readme = readme_file.read()
+
+with open('HISTORY.rst') as history_file:
+    history = history_file.read()
 
 requirements = ["numpy", "pandas", "matplotlib", ]
 
@@ -28,7 +31,7 @@ setup(
     description="Time series forecasting using arar algorithm.",
     install_requires=requirements,
     license="MIT license",
-    long_description=readme,
+    long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='arar',
     name='arar',
