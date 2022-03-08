@@ -14,10 +14,6 @@ class ARAR:
             freq: str
                 The frequency of the data should be a pandas freq strings.
                 See: <https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases>
-            max_lag : int
-                Maximum lag for autocorelation function.
-                It must be max_lag>=26, for the reason see:
-                    Brockwell, Peter J., and Richard A. Davis ARAR chapter.
         References:
             Brockwell, Peter J., and Richard A. Davis.
             Introduction to Time Series and Forecasting.
@@ -39,13 +35,13 @@ class ARAR:
             test_series.columns = ["test"]
             train.head()
             # forecast using ARAR model
-            model = ARAR(train, fh = 12, freq = "MS", max_lag= 26)
+            model = ARAR(train, fh = 12, freq = "MS")
             model.forecast()
             model.get_forecast()
             model.accuracy(test_set = test)
             model.plot()
     """
-    def __init__(self, df, h, freq, max_lag = 26):
+    def __init__(self, df, h, freq):
         """
         Initiates ARAR algorithm to forecast a univariate time series
         automaticly without paramether tuning.
@@ -54,18 +50,17 @@ class ARAR:
                 ds the date column and y the univariate time series.
             h: An integer to specify forecast horizon
             freq: The frequency of the data
-            max_lag: Maximum lag for autocorelation function
         Returns:
             h ahead forecast and prediction intervals at 95 and 80 confidence
             interval.
             """
+        assert len(df.index) < 40, "Arar needs at least 40 observations."
         self.y = np.array(df["y"])
         self.ds = pd.to_datetime(df["ds"])
         self.h = h
         self.freq = freq
         self.df = df
-        self.max_lag = max_lag
-
+        
     def forecast(self):
         """
         Forecast a univariate timeseries using ARAR algorithm.
@@ -232,12 +227,12 @@ class ARAR:
         ax.set_xlabel('Date')
         ax.set_ylabel(y_axis)
         plt.legend()
-    def _autocovariance(self, x):
+    def _autocovariance(self, x, max_lag = 40):
         """ Autocovariance of a time series. 
         Args: 
             x: A time series as a numpy array
+            max_lag: max lag, do not change
             """
-        max_lag = self.max_lag
         n = len(x)
         if(max_lag < n):
             assert "The series too short"
