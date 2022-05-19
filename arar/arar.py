@@ -4,11 +4,13 @@ import pandas as pd
 
 class ARAR:
     """
-    ARAR is implementation of ararma algorithm in Python
+    ARAR is implementation of arar algorithm in Python,
+    see Brockwell, Peter J., and Richard A. Davis.
         Attributes:
             df : pandas.DataFrame
                 A pandas data frame which has two columns:
-                ds the date column and y the univariate time series.
+                ds the date column and y the univariate time series same as
+                fbprophet input data frame.
             h : int
                 An integer to specify forecast horizon
             freq: str
@@ -21,31 +23,15 @@ class ARAR:
         References:
             Brockwell, Peter J., and Richard A. Davis.
             Introduction to Time Series and Forecasting.
-            Chapter 10. 2nd ed. Springer, 2002
-            
+            Chapter 10. 2nd ed. Springer, 2016
+
             Weigt George (2018),
             itsmr: Time Series Analysis Using the Innovations Algorithm.
+
         Examples:
-            from arar.arar import ARAR
-            import pandas as pd
-            df = pd.read_csv("https://raw.githubusercontent.com/Akai01/example-time-series-datasets/main/Data/retail.csv", sep= ",")
-            df.head()
-            df_sub = df[['date', 'series_38']]
-            df_sub.columns = ["ds", "y"]
-            df_sub.head()
-            train = df_sub[:-12]
-            test = df_sub[-12:]
-            test_series = pd.DataFrame(pd.array(test['y']), index= pd.to_datetime( test["ds"]))
-            test_series.columns = ["test"]
-            train.head()
-            # forecast using ARAR model
-            model = ARAR(train, fh = 12, freq = "MS", max_lag= 26)
-            model.forecast()
-            model.get_forecast()
-            model.accuracy(test_set = test)
-            model.plot()
+
     """
-    
+
     def __init__(self, df, h, freq, max_lag=26):
         """
         Initiates ARAR algorithm to forecast a univariate time series
@@ -75,11 +61,12 @@ class ARAR:
         Args:
             None
         Returns:
-            A ARAR model object.
+            A Pandas DataFrame
         """
         h = self.h
         Y = y = self.y
         psi = [1]
+
         for k in np.array(range(0, 3)):
             n = len(y)
             phi = [np.matmul(y[range(i+1, n)],
@@ -182,14 +169,22 @@ class ARAR:
 
         mean = y[n-1 + np.array(range(1, h+1))]
 
+        if h > k:
+            xi = np.append(xi, np.zeros(h - k))
+        
+        tau = np.zeros(h)
+        tau[0] = 1
+        
+        if h > 1:
+            for j in range(h-1):
+                tau[j+1]
+        
+        
         self.mean = mean
         self.upper_95 = mean + 1.96*np.std(y)/np.sqrt(len(y))
         self.upper_80 = mean + 1.28*np.std(y)/np.sqrt(len(y))
         self.lower_95 = mean - 1.96*np.std(y)/np.sqrt(len(y))
         self.lower_80 = mean - 1.96*np.std(y)/np.sqrt(len(y))
-        return self
-
-    def get_forecast(self):
         out = pd.DataFrame(
             {
              "mean": self.mean,
@@ -197,9 +192,10 @@ class ARAR:
              "upper_80": self.upper_80,
              "lower_95": self.lower_95,
              "lower_80": self.lower_80},
-            index = pd.date_range(start=max(self.ds),
-                                  freq=self.freq, periods=self.h + 1)[1:])
+            index=pd.date_range(start=max(self.ds),
+                                freq=self.freq, periods=self.h + 1)[1:])
         return out
+
     def accuracy(self, test_set):
         """
         Accuracy measures for a forecast model
@@ -224,28 +220,6 @@ class ARAR:
             Test_accuracy = self._accuracy(actual, pred)
         return Test_accuracy
 
-    def plot(self, y_axis='Value'):
-        """Plot an ARAR  object
-        Args:
-
-            y_axis: A string to specify y axis"""
-        df = pd.DataFrame({"y": self.y}, index=self.ds)
-        ax = df["y"].plot(label='observed')
-        fc = pd.DataFrame(
-            {
-             "mean": self.mean,
-             "upper_95": self.upper_95,
-             "upper_80": self.upper_80,
-             "lower_95": self.lower_95,
-             "lower_80": self.lower_80},
-            index=pd.date_range(
-                start=max(self.ds), freq=self.freq, periods=self.h + 1)[1:])
-
-        fc["mean"].plot(ax=ax, label='Point forecast')
-        ax.fill_between(fc.index, fc.iloc[:, 1], fc.iloc[:, 4], color='gray')
-        ax.set_xlabel('Date')
-        ax.set_ylabel(y_axis)
-        plt.legend()
     def _autocovariance(self, x):
         """ Autocovariance of a time series.
         Args:
@@ -257,11 +231,9 @@ class ARAR:
             assert "The series too short"
 
         xbar = np.mean(x)
-        def f(j):
-            a1 = (x[0:(n - j)] - xbar)
-            a2 = (x[(j):n] - xbar)
-            return(sum(a1*a2)/n)
-        out = [f(j) for j in range(0, max_lag+1)]
+        out = [sum(
+            (x[0:(n - j)] - xbar)*(x[(j):n] - xbar)
+            )/n for j in range(0, max_lag+1)]
         return(out)
 
     def _accuracy(self, actual, pred):
